@@ -2,7 +2,6 @@
 import { fixture, assert } from "@open-wc/testing";
 
 import '../tasksistant-board-component';
-import mocks from './mocks';
 
 describe('Suite cases', () => {
     it('First Test', async () => {
