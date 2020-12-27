@@ -1,0 +1,28 @@
+{
+  "name": "@tasksistant-components/tasksistant-board-component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tasksistant-board-component.js",
+  "module": "tasksistant-board-component.js",
+  "scripts": {
+    "serve": "es-dev-server --app-index demo/index.html --node-resolve --watch --open",
+    "test": "karma start --coverage",
+    "test:watch": "karma start --auto-watch=true --single-run=false",
+    "test:update-snapshots": "karma start --update-snapshots",
+    "test:prune-snapshots": "karma start --prune-snapshots"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit-element": "^2.4.0",
+    "@tasksistant-components/tasksistant-cell-component": "github:armandolezama/tasksistant-cell-component#develop"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.32",
+    "@open-wc/testing-karma": "^4.0.9",
+    "deepmerge": "^4.2.2",
+    "es-dev-server": "^2.0.2",
+    "karma": "^5.2.3"
+  }
+}
