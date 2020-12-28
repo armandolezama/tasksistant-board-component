@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script type="module">
-        import '../tasksistant-board-component'
+      import "../tasksistant-board-component";
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <tasksistant-board-component></tasksistant-board-component>
+    <div>
+      <button onclick="goToNodeComponent('top')">Up</button>
+      <button onclick="goToNodeComponent('bottom')">Down</button>
+      <button onclick="goToNodeComponent('left')">Left</button>
+      <button onclick="goToNodeComponent('right')">Right</button>
+    </div>
+
+    <div>
+      <label for="columns-input">Set columns number</label>
+      <input type="number" name="columns-input" id="columns-count">
+      <label for="rows-input">Set rows number</label>
+      <input type="number" name="rows-input" id="rows-count">
+      <button onclick="setBoardSpace()"> Set board size</button>
+    </div>
+
+    
+    <div>
+      <button onclick="linkSpaceBoard()">Link board space</button>
+    </div>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
