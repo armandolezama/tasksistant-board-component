@@ -1,10 +1,6 @@
 import { css } from 'lit-element';
 
 export default css`
-  :host(*) {
-    margin: 0;
-    padding: 0;
-  }
 
   tasksistant-cell-component {
     --tasksistant-cell-component-main-container-border: none;
@@ -19,5 +15,10 @@ export default css`
   tasksistant-cell-component.active {
     --tasksistant-cell-component-main-container-background: red;
     --tasksistant-cell-component-node-slot-background: red;
+  }
+
+  #main-container {
+    width: 500px;
+    height: 500px;
   }
 `;

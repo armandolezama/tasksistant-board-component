@@ -1,6 +1,6 @@
-import { LitElement, html } from "lit-element";
-import "@tasksistant-components/tasksistant-cell-component";
-import styles from "./tasksistant-board-component-styles";
+import { LitElement, html } from 'lit-element';
+import '@tasksistant-components/tasksistant-cell-component';
+import styles from './tasksistant-board-component-styles';
 
 export class TasksistantBoardComponent extends LitElement {
   /**
@@ -15,7 +15,7 @@ export class TasksistantBoardComponent extends LitElement {
     this.boardSpace = [];
     this.boardDirectory = new Map();
     this.currenNode = {};
-  }
+  };
 
   /**
    * Object describing property-related metadata used by Polymer features
@@ -28,11 +28,11 @@ export class TasksistantBoardComponent extends LitElement {
       boardDirectory: { type: Array },
       currentNode: { type: Object },
     };
-  }
+  };
 
   static get styles() {
     return styles;
-  }
+  };
 
   manageNodeFilled() {};
 
@@ -64,7 +64,7 @@ export class TasksistantBoardComponent extends LitElement {
         case "bottom":
           this.currenNode = this.boardSpace[xAxis + 1][yAxis];
           break;
-      }
+      };
       this.addCurrentNodeActiveStyle();
       this.dispatchEvent(
         new CustomEvent("tasksistant-board-current-node-changed", {
@@ -75,8 +75,8 @@ export class TasksistantBoardComponent extends LitElement {
       );
     } else {
       this.dispatchEvent(new CustomEvent("tasksistant-board-new-node-missing"));
-    }
-  }
+    };
+  };
 
   linkHTMLElements() {
     for (let row = 0; row < this.numberOfRows; row++) {
@@ -91,9 +91,9 @@ export class TasksistantBoardComponent extends LitElement {
           ),
           coordinates: [row, column],
         };
-      }
-    }
-  }
+      };
+    };
+  };
 
   linkByDirection(direction = "", coordinates = []) {
     if (direction !== "" && coordinates.length === 2) {
@@ -122,9 +122,9 @@ export class TasksistantBoardComponent extends LitElement {
           nodeOrigin.cell[direction].cellReference = nodeDestiny;
           nodeDestiny.cell.top.cellReference = nodeOrigin;
           break;
-      }
-    }
-  }
+      };
+    };
+  };
 
   linkBoardCells() {
     for (const row of this.boardSpace) {
@@ -134,17 +134,17 @@ export class TasksistantBoardComponent extends LitElement {
         }
         if (cell.coordinates[1] < this.numberOfColumns - 1) {
           this.linkByDirection("right", cell.coordinates);
-        }
-      }
-    }
-  }
+        };
+      };
+    };
+  };
 
   linkBoardSpace() {
     this.linkHTMLElements();
     this.linkBoardCells();
     this.currenNode = this.boardSpace[0][0];
     this.addCurrentNodeActiveStyle();
-  }
+  };
 
   render() {
     return html`
@@ -197,11 +197,11 @@ export class TasksistantBoardComponent extends LitElement {
                   ? html`<h2>Not enough columns</h2>`
                   : this.numberOfColumns}
               `;
-            }
+            };
           })()}
         </table>
       </div>
     `;
-  }
-}
+  };
+};
 customElements.define("tasksistant-board-component", TasksistantBoardComponent);
