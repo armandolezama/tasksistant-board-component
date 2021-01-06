@@ -46,6 +46,10 @@ export class TasksistantBoardComponent extends LitElement {
     this.currenNode.cell.classList.add('active');
   };
 
+  focusCurrentNode() {
+    this.currenNode.cell.scrollIntoView(true);
+  };
+
   navigateFromCurrentNodeTo(direction) {
     if (this.currenNode.cell[direction].cellReference.cell) {
       this.removeCurrentNodeActiveStyle();
@@ -66,6 +70,7 @@ export class TasksistantBoardComponent extends LitElement {
           break;
       };
       this.addCurrentNodeActiveStyle();
+      this.focusCurrentNode();
       this.dispatchEvent(
         new CustomEvent("tasksistant-board-current-node-changed", {
           detail: {
