@@ -47,7 +47,7 @@ export class TasksistantBoardComponent extends LitElement {
   };
 
   focusCurrentNode() {
-    this.currenNode.cell.scrollIntoView(true);
+    this.currenNode.cell.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
   };
 
   navigateFromCurrentNodeTo(direction) {
