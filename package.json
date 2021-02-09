@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "lit-element": "^2.4.0",
-    "@tasksistant-components/tasksistant-cell-component": "github:armandolezama/tasksistant-cell-component#develop"
+    "@tasksistant-components/tasksistant-cell-component": "github:armandolezama/tasksistant-cell-component#develop",
+    "@tasksistant-components/tasksistant-item-component": "github:armandolezama/tasksistant-item-component#develop",
+    "@tasksistant-components/tasksistant-canvas": "github:armandolezama/tasksistant-canvas#develop"
   },
   "devDependencies": {
     "@open-wc/testing": "^2.5.32",

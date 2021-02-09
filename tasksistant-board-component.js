@@ -1,6 +1,7 @@
-import { LitElement, html } from 'lit-element';
-import '@tasksistant-components/tasksistant-cell-component';
-import styles from './tasksistant-board-component-styles';
+import { LitElement, html } from "lit-element";
+import "@tasksistant-components/tasksistant-cell-component";
+import "@tasksistant-components/tasksistant-item-component";
+import styles from "./tasksistant-board-component-styles";
 
 export class TasksistantBoardComponent extends LitElement {
   /**
@@ -38,20 +39,31 @@ export class TasksistantBoardComponent extends LitElement {
 
   manageNodeCleaned() {};
 
+  manageNewReference(e) {
+    const currentCell = e.currentTarget;
+    const side = e.detail.side;
+
+    console.log(currentCell.node, side);
+  };
+
   removeCurrentNodeActiveStyle() {
-    this.currenNode.cell.classList.remove('active');
+    this.currenNode.cell.classList.remove("active");
   };
 
   addCurrentNodeActiveStyle() {
-    this.currenNode.cell.classList.add('active');
+    this.currenNode.cell.classList.add("active");
   };
 
   focusCurrentNode() {
-    this.currenNode.cell.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
+    this.currenNode.cell.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
   };
 
   navigateFromCurrentNodeTo(direction) {
-    if (this.currenNode.cell[direction].cellReference.cell) {
+    if (this.currenNode.cell.sides[direction].reference.cell) {
       this.removeCurrentNodeActiveStyle();
       const xAxis = this.currenNode.coordinates[0];
       const yAxis = this.currenNode.coordinates[1];
@@ -96,6 +108,9 @@ export class TasksistantBoardComponent extends LitElement {
           ),
           coordinates: [row, column],
         };
+        this.boardSpace[row][column].cell.setNodeContent({
+          coordinates: [row, column],
+        });
       };
     };
   };
@@ -109,23 +124,23 @@ export class TasksistantBoardComponent extends LitElement {
       switch (direction) {
         case "left":
           nodeDestiny = this.boardSpace[row][column - 1];
-          nodeOrigin.cell[direction].cellReference = nodeDestiny;
-          nodeDestiny.cell.right.cellReference = nodeOrigin;
+          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+          nodeDestiny.cell.setNewReference("right", nodeOrigin);
           break;
         case "right":
           nodeDestiny = this.boardSpace[row][column + 1];
-          nodeOrigin.cell[direction].cellReference = nodeDestiny;
-          nodeDestiny.cell.left.cellReference = nodeOrigin;
+          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+          nodeDestiny.cell.setNewReference("left", nodeOrigin);
           break;
         case "top":
           nodeDestiny = this.boardSpace[row - 1][column];
-          nodeOrigin.cell[direction].cellReference = nodeDestiny;
-          nodeDestiny.cell.bottom.cellReference = nodeOrigin;
+          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+          nodeDestiny.cell.setNewReference("bottom", nodeOrigin);
           break;
         case "bottom":
           nodeDestiny = this.boardSpace[row + 1][column];
-          nodeOrigin.cell[direction].cellReference = nodeDestiny;
-          nodeDestiny.cell.top.cellReference = nodeOrigin;
+          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+          nodeDestiny.cell.setNewReference("top", nodeOrigin);
           break;
       };
     };
@@ -136,7 +151,7 @@ export class TasksistantBoardComponent extends LitElement {
       for (const cell of row) {
         if (cell.coordinates[0] < this.numberOfRows - 1) {
           this.linkByDirection("bottom", cell.coordinates);
-        }
+        };
         if (cell.coordinates[1] < this.numberOfColumns - 1) {
           this.linkByDirection("right", cell.coordinates);
         };
@@ -161,7 +176,7 @@ export class TasksistantBoardComponent extends LitElement {
               for (let row = 0; row < this.numberOfRows; row++) {
                 boardTemplate = html`
                   ${boardTemplate}
-                  <tr id="board-row-${row}">
+                  <tr id="board-row-${row}" class="taksistant-table-row">
                     ${(() => {
                       let boardRow = html``;
                       for (
@@ -171,18 +186,21 @@ export class TasksistantBoardComponent extends LitElement {
                       ) {
                         boardRow = html`
                           ${boardRow}
-                          <td>
+                          <td class="tasksistant-table-cell">
                             <tasksistant-cell-component
                               id="tasksistant-cell-${row}-${column}"
                               @tasksistant-cell-component-node-content-added="${this
                                 .manageNodeFilled}"
                               @tasksistant-cell-component-node-content-deleted="${this
                                 .manageNodeCleaned}"
+                              @tasksistant-cell-component-new-reference-added="${this
+                                .manageNewReference}"
                             >
                               <div slot="node-slot">
-                                <h3 id="tasksistant-item-${row}-${column}">
-                                  hello from node ${row} ${column}
-                                </h3>
+                                <tasksistant-item-component
+                                  id="tasksistant-item-${row}-${column}"
+                                >
+                                </tasksistant-item-component>
                               </div>
                             </tasksistant-cell-component>
                           </td>
@@ -202,7 +220,7 @@ export class TasksistantBoardComponent extends LitElement {
                   ? html`<h2>Not enough columns</h2>`
                   : this.numberOfColumns}
               `;
-            };
+            }
           })()}
         </table>
       </div>
