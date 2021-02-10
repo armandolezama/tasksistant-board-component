@@ -166,6 +166,42 @@ export class TasksistantBoardComponent extends LitElement {
     this.addCurrentNodeActiveStyle();
   };
 
+  executeOrderOnCurrentNode(order){
+    const splitedOrder = order.split(' ');
+    if(splitedOrder[0] === 'figure') {
+      this.figureOrder(splitedOrder);
+    } else if(splitedOrder[0] === 'stripe') {
+      this.stripeOrder(splitedOrder);
+    }
+  };
+
+  figureOrder(splitedOrder) {
+    const complements = {
+      up: '',
+      down: '',
+      left: '',
+      right: ''
+    };
+    this.currenNode.item.setCanvasFigure(splitedOrder[1]);
+    for (let index = 2; index < splitedOrder.length; index += 2) {
+      complements[splitedOrder[index]] = splitedOrder[index + 1];
+    };
+    this.currenNode.item.setCanvasFigureComplements(complements.left, complements.right, complements.up, complements.down);
+  }
+
+  stripeOrder(splitedOrder) {
+    const stripes = {
+      left: false,
+      right: false,
+      down: false,
+      up: false
+    };
+    for (let index = 1; index < splitedOrder.length; index++) {
+      stripes[splitedOrder[index]] = true;
+    };
+    this.currenNode.item.setStripes(stripes.left, stripes.right, stripes.up, stripes.down);
+  }
+
   render() {
     return html`
       <div id="main-container">
