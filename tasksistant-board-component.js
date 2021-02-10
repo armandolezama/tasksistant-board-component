@@ -15,7 +15,7 @@ export class TasksistantBoardComponent extends LitElement {
     this.numberOfColumns = 0;
     this.boardSpace = [];
     this.boardDirectory = new Map();
-    this.currenNode = {};
+    this.currentNode = {};
   };
 
   /**
@@ -47,15 +47,15 @@ export class TasksistantBoardComponent extends LitElement {
   };
 
   removeCurrentNodeActiveStyle() {
-    this.currenNode.cell.classList.remove("active");
+    this.currentNode.cell.classList.remove("active");
   };
 
   addCurrentNodeActiveStyle() {
-    this.currenNode.cell.classList.add("active");
+    this.currentNode.cell.classList.add("active");
   };
 
   focusCurrentNode() {
-    this.currenNode.cell.scrollIntoView({
+    this.currentNode.cell.scrollIntoView({
       behavior: "smooth",
       block: "center",
       inline: "center",
@@ -63,22 +63,22 @@ export class TasksistantBoardComponent extends LitElement {
   };
 
   navigateFromCurrentNodeTo(direction) {
-    if (this.currenNode.cell.sides[direction].reference.cell) {
+    if (this.currentNode.cell.sides[direction].reference.cell) {
       this.removeCurrentNodeActiveStyle();
-      const xAxis = this.currenNode.coordinates[0];
-      const yAxis = this.currenNode.coordinates[1];
+      const xAxis = this.currentNode.coordinates[0];
+      const yAxis = this.currentNode.coordinates[1];
       switch (direction) {
         case "left":
-          this.currenNode = this.boardSpace[xAxis][yAxis - 1];
+          this.currentNode = this.boardSpace[xAxis][yAxis - 1];
           break;
         case "right":
-          this.currenNode = this.boardSpace[xAxis][yAxis + 1];
+          this.currentNode = this.boardSpace[xAxis][yAxis + 1];
           break;
         case "top":
-          this.currenNode = this.boardSpace[xAxis - 1][yAxis];
+          this.currentNode = this.boardSpace[xAxis - 1][yAxis];
           break;
         case "bottom":
-          this.currenNode = this.boardSpace[xAxis + 1][yAxis];
+          this.currentNode = this.boardSpace[xAxis + 1][yAxis];
           break;
       };
       this.addCurrentNodeActiveStyle();
@@ -86,7 +86,7 @@ export class TasksistantBoardComponent extends LitElement {
       this.dispatchEvent(
         new CustomEvent("tasksistant-board-current-node-changed", {
           detail: {
-            currenNode: this.currenNode,
+            currentNode: this.currentNode,
           },
         })
       );
@@ -162,7 +162,7 @@ export class TasksistantBoardComponent extends LitElement {
   linkBoardSpace() {
     this.linkHTMLElements();
     this.linkBoardCells();
-    this.currenNode = this.boardSpace[0][0];
+    this.currentNode = this.boardSpace[0][0];
     this.addCurrentNodeActiveStyle();
   };
 
@@ -182,11 +182,11 @@ export class TasksistantBoardComponent extends LitElement {
       left: '',
       right: ''
     };
-    this.currenNode.item.setCanvasFigure(splitedOrder[1]);
+    this.currentNode.item.setCanvasFigure(splitedOrder[1]);
     for (let index = 2; index < splitedOrder.length; index += 2) {
       complements[splitedOrder[index]] = splitedOrder[index + 1];
     };
-    this.currenNode.item.setCanvasFigureComplements(complements.left, complements.right, complements.up, complements.down);
+    this.currentNode.item.setCanvasFigureComplements(complements.left, complements.right, complements.up, complements.down);
   }
 
   stripeOrder(splitedOrder) {
@@ -199,7 +199,7 @@ export class TasksistantBoardComponent extends LitElement {
     for (let index = 1; index < splitedOrder.length; index++) {
       stripes[splitedOrder[index]] = true;
     };
-    this.currenNode.item.setStripes(stripes.left, stripes.right, stripes.up, stripes.down);
+    this.currentNode.item.setStripes(stripes.left, stripes.right, stripes.up, stripes.down);
   }
 
   render() {
