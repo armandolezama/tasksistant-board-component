@@ -15,13 +15,18 @@ export default css`
   }
 
   tasksistant-cell-component.dead {
-    --tasksistant-cell-component-main-container-background: black;
-    --tasksistant-cell-component-node-slot-background: black;
+    --tasksistant-cell-component-main-container-background: gray;
+    --tasksistant-cell-component-node-slot-background: gray;
   }
 
-  tasksistant-cell-component.active {
+  tasksistant-cell-component.alive {
     --tasksistant-cell-component-main-container-background: white;
     --tasksistant-cell-component-node-slot-background: white;
+  }
+
+  tasksistant-cell-component.focused {
+    --tasksistant-cell-component-main-container-background: red;
+    --tasksistant-cell-component-node-slot-background: red;
   }
 
   tasksistant-item-component {

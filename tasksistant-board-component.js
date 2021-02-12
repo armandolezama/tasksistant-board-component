@@ -38,11 +38,11 @@ export class TasksistantBoardComponent extends LitElement {
   };
 
   removeCurrentNodeActiveStyle() {
-    this.currentNode.cell.classList.remove("active");
+    this.currentNode.cell.classList.remove("focused");
   };
 
   addCurrentNodeActiveStyle() {
-    this.currentNode.cell.classList.add("active");
+    this.currentNode.cell.classList.add("focused");
   };
 
   focusCurrentNode() {
@@ -87,7 +87,7 @@ export class TasksistantBoardComponent extends LitElement {
   };
 
   getCellByCoordinates(xAxis = 0, yAxis = 0) {
-    if(xAxis && yAxis){
+    if(xAxis +1 && yAxis + 1 && xAxis < parseInt(this.numberOfRows) && yAxis < parseInt(this.numberOfColumns)){
       return this.boardSpace[xAxis][yAxis];
     };
   };
