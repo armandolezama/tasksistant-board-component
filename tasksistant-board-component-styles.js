@@ -15,13 +15,13 @@ export default css`
   }
 
   tasksistant-cell-component.dead {
-    --tasksistant-cell-component-main-container-background: red;
-    --tasksistant-cell-component-node-slot-background: red;
+    --tasksistant-cell-component-main-container-background: black;
+    --tasksistant-cell-component-node-slot-background: black;
   }
 
   tasksistant-cell-component.active {
-    --tasksistant-cell-component-main-container-background: red;
-    --tasksistant-cell-component-node-slot-background: red;
+    --tasksistant-cell-component-main-container-background: white;
+    --tasksistant-cell-component-node-slot-background: white;
   }
 
   tasksistant-item-component {
@@ -40,11 +40,10 @@ export default css`
 
   #board-table {
     display: table;
-    border-collapse: separate;
+    border-collapse: collapse;
     box-sizing: border-box;
     text-indent: initial;
     border-spacing: 0;
-    border-color: grey;
   }
 
   .tasksistant-table-cell{
