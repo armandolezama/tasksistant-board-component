@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 import "@tasksistant-components/tasksistant-cell-component";
 import "@tasksistant-components/tasksistant-item-component";
+import figures from './tasksistant-chart-figures';
 import styles from "./tasksistant-board-component-styles";
 
 export class TasksistantBoardComponent extends LitElement {
@@ -16,6 +17,7 @@ export class TasksistantBoardComponent extends LitElement {
     this.boardSpace = [];
     this.boardDirectory = new Map();
     this.currentNode = {};
+    this.figures = figures;
   };
 
   /**
@@ -33,17 +35,6 @@ export class TasksistantBoardComponent extends LitElement {
 
   static get styles() {
     return styles;
-  };
-
-  manageNodeFilled() {};
-
-  manageNodeCleaned() {};
-
-  manageNewReference(e) {
-    const currentCell = e.currentTarget;
-    const side = e.detail.side;
-
-    console.log(currentCell.node, side);
   };
 
   removeCurrentNodeActiveStyle() {
@@ -95,6 +86,16 @@ export class TasksistantBoardComponent extends LitElement {
     };
   };
 
+  getCellByCoordinates(xAxis = 0, yAxis = 0) {
+    if(xAxis && yAxis){
+      return this.boardSpace[xAxis][yAxis];
+    };
+  };
+
+  getFigures() {
+    return this.figures;
+  };
+
   linkHTMLElements() {
     for (let row = 0; row < this.numberOfRows; row++) {
       this.boardSpace[row] = [];
@@ -108,9 +109,6 @@ export class TasksistantBoardComponent extends LitElement {
           ),
           coordinates: [row, column],
         };
-        this.boardSpace[row][column].cell.setNodeContent({
-          coordinates: [row, column],
-        });
       };
     };
   };
@@ -172,7 +170,7 @@ export class TasksistantBoardComponent extends LitElement {
       this.figureOrder(splitedOrder);
     } else if(splitedOrder[0] === 'stripe') {
       this.stripeOrder(splitedOrder);
-    }
+    };
   };
 
   figureOrder(splitedOrder) {
@@ -187,7 +185,7 @@ export class TasksistantBoardComponent extends LitElement {
       complements[splitedOrder[index]] = splitedOrder[index + 1];
     };
     this.currentNode.item.setCanvasFigureComplements(complements.left, complements.right, complements.up, complements.down);
-  }
+  };
 
   stripeOrder(splitedOrder) {
     const stripes = {
@@ -200,7 +198,7 @@ export class TasksistantBoardComponent extends LitElement {
       stripes[splitedOrder[index]] = true;
     };
     this.currentNode.item.setStripes(stripes.left, stripes.right, stripes.up, stripes.down);
-  }
+  };
 
   render() {
     return html`
@@ -225,15 +223,10 @@ export class TasksistantBoardComponent extends LitElement {
                           <td class="tasksistant-table-cell">
                             <tasksistant-cell-component
                               id="tasksistant-cell-${row}-${column}"
-                              @tasksistant-cell-component-node-content-added="${this
-                                .manageNodeFilled}"
-                              @tasksistant-cell-component-node-content-deleted="${this
-                                .manageNodeCleaned}"
-                              @tasksistant-cell-component-new-reference-added="${this
-                                .manageNewReference}"
-                            >
+                                class="dead">
                               <div slot="node-slot">
                                 <tasksistant-item-component
+                                  .figures="${this.figures}"
                                   id="tasksistant-item-${row}-${column}"
                                 >
                                 </tasksistant-item-component>
