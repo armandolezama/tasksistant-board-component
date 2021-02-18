@@ -86,6 +86,20 @@ export class TasksistantBoardComponent extends LitElement {
     };
   };
 
+  getNeighborOfCurrentNode(direction){
+    return this.currentNode.cell.sides[direction].reference;
+  };
+
+  setCellStateByCoordinates(xAxis = 0, yAxis= 0, state = {}) {
+    const cell = this.getCellByCoordinates(xAxis, yAxis);
+    cell.setNodeContent(state);
+  };
+
+  getCellStateByCoordinates(){
+    const cell = this.getCellByCoordinates(xAxis, yAxis);
+    return cell.getNodeContent();
+  }
+
   getCellByCoordinates(xAxis = 0, yAxis = 0) {
     if(xAxis +1 && yAxis + 1 && xAxis < parseInt(this.numberOfRows) && yAxis < parseInt(this.numberOfColumns)){
       return this.boardSpace[xAxis][yAxis];

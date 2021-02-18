@@ -60,6 +60,7 @@ export default css`
   }
 
   .taksistant-table-row{
+    display: inline-flex;
     margin: 0;
     padding: 0;
     width: 100%;
