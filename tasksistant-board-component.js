@@ -92,16 +92,16 @@ export class TasksistantBoardComponent extends LitElement {
 
   setCellStateByCoordinates(xAxis = 0, yAxis= 0, state = {}) {
     const cell = this.getCellByCoordinates(xAxis, yAxis);
-    cell.setNodeContent(state);
+    cell.cell.setNodeContent(state);
   };
 
   getCellStateByCoordinates(){
     const cell = this.getCellByCoordinates(xAxis, yAxis);
-    return cell.getNodeContent();
+    return cell.cell.getNodeContent();
   }
 
   getCellByCoordinates(xAxis = 0, yAxis = 0) {
-    if(xAxis +1 && yAxis + 1 && xAxis < parseInt(this.numberOfRows) && yAxis < parseInt(this.numberOfColumns)){
+    if(xAxis + 1 && yAxis + 1 && xAxis < parseInt(this.numberOfRows) && yAxis < parseInt(this.numberOfColumns)){
       return this.boardSpace[xAxis][yAxis];
     };
   };
@@ -110,51 +110,49 @@ export class TasksistantBoardComponent extends LitElement {
     return this.figures;
   };
 
-  linkHTMLElements() {
-    for (let row = 0; row < this.numberOfRows; row++) {
-      this.boardSpace[row] = [];
-      for (let column = 0; column < this.numberOfColumns; column++) {
-        this.boardSpace[row][column] = {
-          cell: this.shadowRoot.getElementById(
-            `tasksistant-cell-${row}-${column}`
-          ),
-          item: this.shadowRoot.getElementById(
-            `tasksistant-item-${row}-${column}`
-          ),
-          coordinates: [row, column],
-        };
-      };
-    };
+  linkHTMLElements(){
+    this.boardSpace = Array.from( { length: this.numberOfRows }, (v, row) => {
+      return Array.from({ length: this.numberOfColumns }, (v2, column) => {
+        return this.generateCell(row, column);
+      });
+    });
   };
 
-  linkByDirection(direction = "", coordinates = []) {
-    if (direction !== "" && coordinates.length === 2) {
-      const row = coordinates[0];
-      const column = coordinates[1];
-      const nodeOrigin = this.boardSpace[row][column];
-      let nodeDestiny = [];
-      switch (direction) {
-        case "left":
-          nodeDestiny = this.boardSpace[row][column - 1];
-          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
-          nodeDestiny.cell.setNewReference("right", nodeOrigin);
-          break;
-        case "right":
-          nodeDestiny = this.boardSpace[row][column + 1];
-          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
-          nodeDestiny.cell.setNewReference("left", nodeOrigin);
-          break;
-        case "top":
-          nodeDestiny = this.boardSpace[row - 1][column];
-          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
-          nodeDestiny.cell.setNewReference("bottom", nodeOrigin);
-          break;
-        case "bottom":
-          nodeDestiny = this.boardSpace[row + 1][column];
-          nodeOrigin.cell.setNewReference(direction, nodeDestiny);
-          nodeDestiny.cell.setNewReference("top", nodeOrigin);
-          break;
-      };
+  generateCell(row, column) {
+    const cell = {
+      cell: this.shadowRoot.getElementById(`tasksistant-cell-${row}-${column}`),
+      item: this.shadowRoot.getElementById(`tasksistant-item-${row}-${column}`),
+      coordinates: [row, column],
+    };
+    return cell;
+  };
+
+  linkByDirection(direction, coordinates) {
+    const row = coordinates[0];
+    const column = coordinates[1];
+    const nodeOrigin = this.boardSpace[row][column];
+    let nodeDestiny = [];
+    switch (direction) {
+      case "left":
+        nodeDestiny = this.boardSpace[row][column - 1];
+        nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+        nodeDestiny.cell.setNewReference("right", nodeOrigin);
+        break;
+      case "right":
+        nodeDestiny = this.boardSpace[row][column + 1];
+        nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+        nodeDestiny.cell.setNewReference("left", nodeOrigin);
+        break;
+      case "top":
+        nodeDestiny = this.boardSpace[row - 1][column];
+        nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+        nodeDestiny.cell.setNewReference("bottom", nodeOrigin);
+        break;
+      case "bottom":
+        nodeDestiny = this.boardSpace[row + 1][column];
+        nodeOrigin.cell.setNewReference(direction, nodeDestiny);
+        nodeDestiny.cell.setNewReference("top", nodeOrigin);
+        break;
     };
   };
 
@@ -176,6 +174,11 @@ export class TasksistantBoardComponent extends LitElement {
     this.linkBoardCells();
     this.currentNode = this.boardSpace[0][0];
     this.addCurrentNodeActiveStyle();
+  };
+
+  resetBoard() {
+    this.numberOfRows = 0;
+    this.numberOfColumns = 0;
   };
 
   executeOrderOnCurrentNode(order){
@@ -214,57 +217,56 @@ export class TasksistantBoardComponent extends LitElement {
     this.currentNode.item.setStripes(stripes.left, stripes.right, stripes.up, stripes.down);
   };
 
+  createTable() {
+    if (this.numberOfRows > 0 && this.numberOfColumns > 0) {
+      let boardTemplate = html``;
+        for (let row = 0; row < this.numberOfRows; row++) {
+          boardTemplate = html`
+            ${boardTemplate}
+            <tr id="board-row-${row}" class="taksistant-table-row">
+              ${this.createRow(row)}
+            </tr>
+          `;
+        };
+      return boardTemplate;
+    } else {
+      return html`
+        ${this.numberOfRows === 0
+          ? html`<h2>Not enough rows</h2>`
+          : this.numberOfColumns === 0
+          ? html`<h2>Not enough columns</h2>`
+          : this.numberOfColumns}
+      `;
+    }
+  }
+
+  createRow(row) {
+    let boardRow = html``;
+      for (let column = 0; column < this.numberOfColumns; column++) {
+        boardRow = html`
+          ${boardRow}
+          <td class="tasksistant-table-cell">
+            <tasksistant-cell-component
+              id="tasksistant-cell-${row}-${column}"
+                class="dead">
+              <div slot="node-slot">
+                <tasksistant-item-component
+                  .figures="${this.figures}"
+                  id="tasksistant-item-${row}-${column}">
+                </tasksistant-item-component>
+              </div>
+            </tasksistant-cell-component>
+          </td>
+        `;
+      };
+    return boardRow;
+  };
+
   render() {
     return html`
       <div id="main-container">
         <table id="board-table">
-          ${(() => {
-            if (this.numberOfRows > 0 && this.numberOfColumns > 0) {
-              let boardTemplate = html``;
-              for (let row = 0; row < this.numberOfRows; row++) {
-                boardTemplate = html`
-                  ${boardTemplate}
-                  <tr id="board-row-${row}" class="taksistant-table-row">
-                    ${(() => {
-                      let boardRow = html``;
-                      for (
-                        let column = 0;
-                        column < this.numberOfColumns;
-                        column++
-                      ) {
-                        boardRow = html`
-                          ${boardRow}
-                          <td class="tasksistant-table-cell">
-                            <tasksistant-cell-component
-                              id="tasksistant-cell-${row}-${column}"
-                                class="dead">
-                              <div slot="node-slot">
-                                <tasksistant-item-component
-                                  .figures="${this.figures}"
-                                  id="tasksistant-item-${row}-${column}"
-                                >
-                                </tasksistant-item-component>
-                              </div>
-                            </tasksistant-cell-component>
-                          </td>
-                        `;
-                      }
-                      return boardRow;
-                    })()}
-                  </tr>
-                `;
-              }
-              return boardTemplate;
-            } else {
-              return html`
-                ${this.numberOfRows === 0
-                  ? html`<h2>Not enough rows</h2>`
-                  : this.numberOfColumns === 0
-                  ? html`<h2>Not enough columns</h2>`
-                  : this.numberOfColumns}
-              `;
-            }
-          })()}
+          ${this.createTable()}
         </table>
       </div>
     `;
