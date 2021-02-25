@@ -8,8 +8,3 @@ const setBoardSpace = () => {
   component.numberOfRows = document.getElementById('rows-count').value;
   component.numberOfColumns = document.getElementById('columns-count').value;
 };
-
-const linkSpaceBoard = () => {
-  const component = document.querySelector("tasksistant-board-component");
-  component.linkBoardSpace();
-};
